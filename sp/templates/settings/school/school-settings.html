@@ -12,24 +12,22 @@
 	}
 
 </style>
-<h6 class="title-bg p-2 shadow-sm" style="color: white;">School Settings</h6>
-<div class="container-fluid m-3 col-md-8 col-lg-8">
+<h5 class="p-2 m-2 shadow-sm bg-light col-md-8 col-lg-8 text-center" style="color: #001D6E;">School Settings</h5>
+<div class="container-fluid m-2 col-md-8 col-lg-8">
 	<form method='POST' accept="", enctype="multipart/form-data">
 		{% csrf_token %}
-		<div class="mb-3">
+		<div class="mb-1">
 	    <label for="exampleInputEmail1" class="form-label">School Name</label>
 	    {{form.school_name}}
 		</div>
-		<img class="img-fluid" src="{{request.user.teacher.school_logo.url}}" alt="School Logo" style="width:auto; height:150px;">
-
-		<div class="mb-3 mt-3">
+		<div class="mb-1">
+			<label for="exampleInputEmail1" class="form-label">School Logo</label>
 	    {{form.school_logo}}
 		</div>
-		<div class="btn-group float-end mt-3" role="group" aria-label="Basic example">
-			  <button type="submit" class="btn btn-primary">Submit</button>
-			</div>
+		<button class="btn mt-2 mb-2 float-end" type="submit" style="background-color:#001D6E; color: white;">Submit</button>
 	</form>
 
+	<!-- <img class="img-fluid" src="{{request.user.teacher.school_logo.url}}" alt="School Logo" style="width:auto; height:150px;"> -->
 	
 	
 	

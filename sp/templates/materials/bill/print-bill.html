@@ -1,0 +1,58 @@
+{% extends 'sidebar/sidebar.html' %}
+{% block item %}
+{% load static %}
+{% load crispy_forms_tags %}
+<style type="text/css">
+	label {
+		color: #001D6E;
+	}
+
+	.title-bg {
+		background-color: #7FB5FF;
+	}
+
+</style>
+<h5 class="p-2 m-2 shadow-sm bg-light" style="color: #001D6E;">Print Bill</h5>
+<div class="container">
+    	{% if messages %}
+    	{% for message in messages %}
+    		<div class="alert alert-{{message.tags}}">{{message}}</div>
+    	{% endfor %}
+    	{% endif %}
+    	</div>
+<div class="row m-2">
+	<div class="col-md-8 col-lg-8">
+		<table class="table table-hover">
+			<thead>
+				<th>Date</th>
+				<th>Count</th>
+				<th>Value Each</th>
+			</thead>
+
+			<tr>
+				<td>{{bill.date_created}}</td>
+				<td>{{bill.count}}</td>
+				<th>{{bill.value}}</th>
+			</tr>
+		</table>
+	</div>
+
+	<div class="col-md-4 col-lg-4">
+		<a href="#" class="text-decoration-none" style="color:white;"><h6 class="p-2 shadow-sm" style="background-color:#001D6E;">Return to main bill page</h6></a>
+		<a href="{% url 'print-bill-10' user.id bill.id %}" class="text-decoration-none" style="color:white;"><h6 class="p-2 shadow-sm" style="background-color:#001D6E;">Print large (10 per page)</h6></a>
+		<a href="{% url 'print-bill-20' user.id bill.id %}" class="text-decoration-none" style="color:white;"><h6 class="p-2 shadow-sm" style="background-color:#001D6E;">Print large (20 per page)</h6></a>
+	</div>
+</div>
+
+
+<div class="container m-2">
+<h5>Sample Bill</h5>
+<div class="card p-3 m-2 col-md-5 col-lg-5" style="background-color:#001D6E; color:white">
+	<h1 class="text-start">{{bill.value}}</h1>
+	<h1 class="text-center">{{bill.value}}</h1>
+	<h1 class="text-end">2022</h1>
+</div>
+</div>
+
+
+{% endblock item %}

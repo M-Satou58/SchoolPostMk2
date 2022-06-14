@@ -1,0 +1,29 @@
+{% extends 'sidebar/sidebar.html' %}
+{% block item %}
+{% load static %}
+{% load crispy_forms_tags %}
+<style type="text/css">
+	label {
+		color: #001D6E;
+	}
+
+	.title-bg {
+		background-color: #7FB5FF;
+	}
+
+</style>
+<h5 class="p-2 m-2 shadow-sm bg-light col-md-8 col-lg-8 text-center" style="color: #001D6E;">Update <span style="color:crimson;">{{d.question}}</span></h5>
+	<div class="col-md-8 col-lg-8 m-2">
+		<form method="POST">
+			{% csrf_token %}
+			{{form}}
+			<div class="btn-group float-end mt-3" role="group" aria-label="Basic example">
+			  <button type="submit" class="btn" style="background-color:#001D6E; color:white;">Update</button>
+			  <button type="button" class="btn" style="background-color:crimson;"><a class="text-decoration-none" style="color:white;" href="{% url 'debriefing-session' user.id %}">Cancel</button>
+			</div>
+		</form>
+	</div>
+</div>
+
+
+{% endblock item %}

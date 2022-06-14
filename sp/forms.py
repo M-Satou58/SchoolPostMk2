@@ -130,3 +130,52 @@ class RentForm(forms.ModelForm):
 		self.fields['edate'].widget.attrs['class'] = 'form-control'
 		self.fields['posting'].widget.attrs['class'] = 'form-control'
 		self.fields['amount'].widget.attrs['class'] = 'form-control'
+
+class ItemStoreForm(ModelForm):
+	class Meta:
+		model = ItemStore
+		fields = '__all__'
+		exclude = ['teacher','date_created']
+
+	def __init__(self, teacher, *args, **kwargs):
+		super(ItemStoreForm, self).__init__(*args, **kwargs)
+		self.fields['item'].widget.attrs['class'] = 'form-control'
+		self.fields['price'].widget.attrs['class'] = 'form-control'
+		self.fields['student'] = forms.ModelChoiceField(queryset=StudentEconomy.objects.filter(teacher=teacher, status='Active'))
+		self.fields['student'].widget.attrs['class'] = 'form-control'
+
+
+class BillForm(ModelForm):
+	class Meta:
+		model = Bill
+		fields = '__all__'
+		exclude = ['teacher','date_created', 'total_value']
+
+	def __init__(self, teacher, *args, **kwargs):
+		super(BillForm, self).__init__(*args, **kwargs)
+		self.fields['name'] = forms.ModelChoiceField(queryset=StudentEconomy.objects.filter(teacher=teacher, status='Active'))
+		self.fields['name'].widget.attrs['class'] = 'form-control'
+		self.fields['value'].widget.attrs['class'] = 'form-control'
+		self.fields['count'].widget.attrs['class'] = 'form-control'
+		
+
+class CertificateForm(ModelForm):
+	date = forms.DateTimeField(label="Date", required=True, widget=NumberInput(attrs={'type':'date'}))
+	class Meta:
+		model = Certificate
+		fields = ['student', 'date']
+
+	def __init__(self, teacher, *args, **kwargs):
+		super(CertificateForm, self).__init__(*args, **kwargs)
+		self.fields['student'] = forms.ModelChoiceField(queryset=StudentEconomy.objects.filter(teacher=teacher, status='Active'))
+		self.fields['student'].widget.attrs['class'] = 'form-control'
+		self.fields['date'].widget.attrs['class'] = 'form-control'
+
+class DebriefingSessionForm(ModelForm):
+	class Meta:
+		model = DebriefingSession
+		fields = ['question']
+
+	def __init__(self, *args, **kwargs):
+		super(DebriefingSessionForm, self).__init__(*args, **kwargs)
+		self.fields['question'].widget.attrs['class'] = 'form-control'

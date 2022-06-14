@@ -7,7 +7,7 @@
 </style>
 
 <!-- Button trigger modal -->
-<a type="button" class="nav-link" data-bs-toggle="modal" data-bs-target="#loginModal"><span>Login</span>
+<a type="button" class="nav-link" data-bs-toggle="modal" data-bs-target="#loginModal" style="color: white"><span>Login</span>
 </a>
 
 <!-- Modal -->
@@ -22,14 +22,14 @@
       <div class="modal-body container-fluid m-auto text-center pb-5 pt-5">
         <div class="row">
 							<div class="col">
-								<a href="#"><button class="btn btn-default hover-shadow">
+								<a href="/admin/"><button class="btn btn-default hover-shadow">
 									<img class="img-fluid" src="{% static 'logo/admin_logo.png' %}" alt="admin" style="width:150px; height:auto;">
 								</button></a>
 								<h4 style="color:#001D6E;">Admin</h4>
 								
 							</div>
 							<div class="col" data-mdb-ripple-color="light" data-dismis="modal">
-								<a href="#"><button class="btn btn-default hover-shadow">
+								<a href="{% url 't-login' %}"><button class="btn btn-default hover-shadow">
 									<img class="img-fluid" src="{% static 'logo/teacher_logo.png' %}" alt="teacher" style="width:150px; height:auto;">
 								</button></a>
 								<h4 style="color:#001D6E;">Teacher</h4>

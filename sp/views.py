@@ -17,11 +17,22 @@ from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
 from django.conf import settings
 
+from django.contrib.auth.decorators import login_required
+
+import os
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
+
 # Create your views here.
 def indexView(request):
 	context = {}
 	return render(request, 'main/index01.html', context)
 
+def teacherLoginView(request):
+	context = {}
+	return render(request, 'login/teacher-login.html', context)
+
+@login_required(login_url='/')
 def registerTeacherView(request):
 	if request.method == 'POST':
 		teacher_form = RegisterTeacherForm(request.POST)
@@ -43,6 +54,7 @@ def registerTeacherView(request):
 	context = {'teacher_form':teacher_form, 'teacher_form01':teacher_form01}
 	return render(request, 'registration/teacher-registration-form.html', context)
 
+@login_required(login_url='/')
 def registerStudentView(request,):
 	if request.method == 'POST':
 		form = RegisterStudentForm(request.POST)
@@ -57,6 +69,7 @@ def registerStudentView(request,):
 	context = {'form':form}		
 	return render(request, 'registration/student-registration-form.html', context)
 
+@login_required(login_url='/')
 def economyView(request):
 	e = Economy.objects.all()
 
@@ -98,6 +111,7 @@ def economyView(request):
 	context = {'form':form, 'e':e}
 	return render(request, 'economy/economy.html', context)
 
+@login_required(login_url='/')
 def setActive(request, pk):
 	se = StudentEconomy.objects.get(id=pk)
 	se.status = 'Active'
@@ -105,6 +119,7 @@ def setActive(request, pk):
 	messages.success(request, f'{se.name} set to active')
 	return redirect('/economy/')
 
+@login_required(login_url='/')
 def setInactive(request, pk):
 	se = StudentEconomy.objects.get(id=pk)
 	se.status = 'Inactive'
@@ -114,6 +129,7 @@ def setInactive(request, pk):
 	messages.success(request, f'{se.name} set to inactive')
 	return redirect('/economy/')
 
+@login_required(login_url='/')
 def accountSettingsView(request):
 	if request.method == 'POST':
 		form = PasswordChangeForm(request.user, request.POST)
@@ -128,6 +144,7 @@ def accountSettingsView(request):
 	context = {'form':form}
 	return render(request, 'settings/account/account-settings.html', context)
 
+@login_required(login_url='/')
 def schoolSettingsView(request, user):
 	t = Teacher.objects.get(user=user)
 	if request.method == 'POST':
@@ -145,6 +162,7 @@ def schoolSettingsView(request, user):
 	context = {'form':form}
 	return render(request, 'settings/school/school-settings.html', context)
 
+@login_required(login_url='/')
 def jobsView(request, user):
 	teacher = Teacher.objects.get(user=user)
 	if request.method == 'POST':
@@ -180,6 +198,7 @@ def jobsView(request, user):
 	return render(request, 'rules/jobs/jobs.html', context)
 
 
+@login_required(login_url='/')
 def updateJobsView(request, user, pk):
 	jobs = Job.objects.get(id=pk)
 	teacher = Teacher.objects.get(user=user)
@@ -221,6 +240,7 @@ def updateJobsView(request, user, pk):
 	return render(request, 'rules/jobs/update-jobs.html', context)
 
 
+@login_required(login_url='/')
 def deleteJobsView(request, user, pk):
 	jobs = Job.objects.get(id=pk)
 	se = StudentEconomy.objects.get(name=jobs.student_assigned.name)
@@ -235,6 +255,7 @@ def deleteJobsView(request, user, pk):
 	return render(request, 'rules/jobs/delete-jobs.html', context)
 
 
+@login_required(login_url='/')
 def opportunitiesView(request, user):
 	teacher = Teacher.objects.get(user=user)
 	if request.method == 'POST':
@@ -251,7 +272,7 @@ def opportunitiesView(request, user):
 	context = {'form':form, 'opportunities':opportunities}
 	return render(request, 'rules/opportunities/opportunities.html', context)
 
-
+@login_required(login_url='/')
 def updateOpportunitiesView(request, user, pk):
 	opportunities = Opportunitie.objects.get(id=pk)
 	form = CreateOpportunitiesForm(instance=opportunities)
@@ -265,6 +286,7 @@ def updateOpportunitiesView(request, user, pk):
 	context = {'form':form, 'opportunities':opportunities}
 	return render(request, 'rules/opportunities/update-opportunities.html', context)
 
+@login_required(login_url='/')
 def deleteOpportunitiesView(request, user, pk):
 	opportunities = Opportunitie.objects.get(id=pk)
 	if request.method == 'POST':
@@ -274,6 +296,7 @@ def deleteOpportunitiesView(request, user, pk):
 	context = {'opportunities':opportunities}
 	return render(request, 'rules/opportunities/delete-opportunities.html', context)
 
+@login_required(login_url='/')
 def houseRulesView(request, user):
 	teacher = Teacher.objects.get(user=user)
 	if request.method == 'POST':
@@ -291,7 +314,7 @@ def houseRulesView(request, user):
 	context = {'form':form, 'h':h}
 	return render(request, 'rules/house-rules/house-rules.html', context)
 
-
+@login_required(login_url='/')
 def updateHouseRulesView(request, user, pk):
 	h = HouseRule.objects.get(id=pk)
 	form = CreateHouseRulesForm(instance=h)
@@ -305,6 +328,7 @@ def updateHouseRulesView(request, user, pk):
 	context = {'form':form, 'h':h}
 	return render(request, 'rules/house-rules/update-house-rules.html', context)
 
+@login_required(login_url='/')
 def deleteHouseRulesView(request, user, pk):
 	h = HouseRule.objects.get(id=pk)
 	if request.method == 'POST':
@@ -315,6 +339,7 @@ def deleteHouseRulesView(request, user, pk):
 	return render(request, 'rules/house-rules/delete-house-rules.html', context)
 
 
+@login_required(login_url='/')
 def rentView(request, user):
 	teacher = Teacher.objects.get(user=user)
 	if request.method == 'POST':
@@ -343,9 +368,246 @@ def rentView(request, user):
 	return render(request, 'rules/rent/rent.html', context)
 
 
+@login_required(login_url='/')
 def studentMonitoringView(request, user):
 	teacher = Teacher.objects.get(user=user)
 	se = StudentEconomy.objects.filter(teacher=teacher)
 	context = {'se':se}
 	return render(request, 'monitoring/student/student.html', context)
 
+@login_required(login_url='/')
+def itemStoreView(request, user):
+	teacher = Teacher.objects.get(user=user)
+
+	if request.method == 'POST':
+		form = ItemStoreForm(teacher, request.POST)
+		if form.is_valid():
+			print('Form is Valid')
+
+			item = form.cleaned_data['item']
+			price = form.cleaned_data['price']
+			student = form.cleaned_data['student']
+
+			se = StudentEconomy.objects.get(name=student.name.id, teacher=teacher)
+			if se.money < price:
+				messages.error(request,'Insuffiecient funds!')
+			else:
+				ItemStore(teacher=teacher, item=item, price=price, student=student).save()			
+				se.purchased = f'{se.purchased} ,{item}'
+				se.money = se.money - price
+				se.spend = se.spend + price
+				se.save()
+				print(f'Student: {se.name} Money: {se.money} Item: {se.purchased}')
+				messages.success(request, 'Item added successfully!')
+				return redirect(f'/item-store/{user}/')
+		else:
+			print('Invalid Form')
+
+	item = ItemStore.objects.filter(teacher=teacher)
+	form = ItemStoreForm(teacher)
+	context = {'form':form, 'item':item}
+	return render(request, 'item_store/item-store.html', context)
+
+@login_required(login_url='/')
+def deleteItemStoreView(request, user, pk):
+	item = ItemStore.objects.get(id=pk)
+	if request.method == 'POST':
+		item.delete()
+		messages.success(request, f'{item.item} successfully deleted!')
+		return redirect(f'/item-store/{user}/')
+	context = {'item':item}
+	return render(request, 'item_store/delete-item-store.html', context)
+
+@login_required(login_url='/')
+def billView(request, user):
+	teacher = Teacher.objects.get(user=user)
+
+	if request.method == 'POST':
+		form = BillForm(teacher, request.POST)
+		if form.is_valid():
+			print('Form is valid')
+
+			name = form.cleaned_data['name']
+			value = form.cleaned_data['value']
+			count = form.cleaned_data['count']
+			total_value = value * count
+
+			se = StudentEconomy.objects.get(name=name.name.id, teacher=teacher)
+			Bill(teacher=teacher, name=name, value=value, count=count, total_value=total_value).save()
+
+			se.money = se.money + total_value
+			se.save()
+			messages.success(request, 'Bill successfully added!')
+			print(f'Student: {se} Money:{se.money}')
+			return redirect(f'/materials/bill/{user}')
+
+		else:
+			print('Invalid Form')
+
+	bill = Bill.objects.filter(teacher=teacher)
+	form = BillForm(teacher)
+	context = {'form':form, 'bill':bill}
+	return render(request, 'materials/bill/bill.html', context)
+
+@login_required(login_url='/')
+def moneyCirculationView(request, user):
+	teacher = Teacher.objects.get(user=user)
+	bill = Bill.objects.filter(teacher=teacher)
+	total = 0
+	for i in bill:
+		total += i.total_value
+	context = {'total':total}
+	return render(request, 'materials/bill/money-circulation.html', context)
+
+@login_required(login_url='/')
+def printBillView(request, user, pk):
+	bill = Bill.objects.get(id=pk)
+
+	context = {'bill':bill}
+	return render(request, 'materials/bill/print-bill.html', context)
+
+@login_required(login_url='/')
+def printTenBillsView(request, user, pk):
+	ten = [0,1,2,3,4,5,6,7,8,9]
+	bill = Bill.objects.get(id=pk)
+
+	context = {'bill':bill, 'ten':ten}
+	return render(request, 'materials/bill/print-ten-bills.html', context)
+
+@login_required(login_url='/')
+def printTwentyBillsView(request, user, pk):
+	twenty = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19]
+	bill = Bill.objects.get(id=pk)
+
+	context = {'bill':bill, 'twenty':twenty}
+	return render(request, 'materials/bill/print-twenty-bills.html', context)
+
+@login_required(login_url='/')
+def printJobsView(request, user):
+	teacher = Teacher.objects.get(user=user)
+	jobs = Job.objects.filter(teacher=teacher)
+	context = {'jobs':jobs}
+	return render(request, 'materials/jobs/print-jobs.html', context)
+
+@login_required(login_url='/')
+def printBusinessEnvelopeView(request, user):
+	context = {}
+	return render(request, 'materials/business_envelopes/print-business-envelope.html', context)
+
+@login_required(login_url='/')
+def printHouseRulesView(request, user):
+	teacher = Teacher.objects.get(user=user)
+	h = HouseRule.objects.filter(teacher=teacher)
+	context = {'h':h}
+	return render(request, 'materials/rules/print-house-rules.html', context)
+
+@login_required(login_url='/')
+def certificateView(request, user):
+	teacher = Teacher.objects.get(user=user)
+
+	if request.method == 'POST':
+		form = CertificateForm(teacher, request.POST)
+		if form.is_valid():
+			print('Form is valid')
+			student = form.cleaned_data['student']
+			date = form.cleaned_data['date']
+			Certificate(teacher=teacher, student=student, date=date).save()
+
+		else:
+			print('Invalid form')
+
+	form = CertificateForm(teacher)
+	context = {'form':form}
+	return render(request, 'materials/certificate/certificate.html', context)
+
+@login_required(login_url='/')
+def printCertificateView(request, user):
+	c = Certificate.objects.all().last()
+	context = {'c':c}
+	return render(request, 'materials/certificate/print-certificate.html', context)
+
+@login_required(login_url='/')
+def debriefingSessionView(request, user):
+	teacher = Teacher.objects.get(user=user)
+	
+	if request.method == 'POST':
+		form = DebriefingSessionForm(request.POST)
+		if form.is_valid():
+			question = form.cleaned_data['question']
+			DebriefingSession(teacher=teacher, question=question).save()
+			messages.success(request, 'Question created successfully!')
+
+	d = DebriefingSession.objects.filter(teacher=teacher)
+	form = DebriefingSessionForm()
+	context = {'form':form, 'd':d}
+
+	return render(request, 'materials/debriefing_session/debriefing-session.html', context)
+
+@login_required(login_url='/')
+def updateDebriefingSessionView(request, user, pk):
+	d = DebriefingSession.objects.get(id=pk)
+	form = DebriefingSessionForm(instance=d)
+	if request.method == 'POST':
+		form = DebriefingSessionForm(request.POST, instance=d)
+		if form.is_valid():
+			form.save()
+			messages.success(request, 'Question successfully updated!')
+			return redirect(f'/materials/debriefing-session/{user}/')
+	
+	context = {'form':form, 'd':d}
+	return render(request, 'materials/debriefing_session/update-debriefing-session.html', context)
+
+@login_required(login_url='/')
+def deleteDebriefingSessionView(request, user, pk):
+	d = DebriefingSession.objects.get(id=pk)
+	if request.method == 'POST':
+		d.delete()
+		messages.success(request, f'{d.question} successfully deleted!')
+		return redirect(f'/materials/debriefing-session/{user}')
+	context = {'d':d}
+	return render(request, 'materials/debriefing_session/delete-debriefing-session.html', context)
+
+@login_required(login_url='/')
+def printDebriefingSessionView(request, user):
+	teacher = Teacher.objects.get(user=user)
+	d = DebriefingSession.objects.filter(teacher=teacher)
+	context = {'d':d}
+	return render(request,'materials/debriefing_session/print-debriefing-session.html', context)
+
+
+def password_reset_request(request):
+	if request.method == "POST":
+		password_reset_form = PasswordResetForm(request.POST)
+		if password_reset_form.is_valid():
+			data = password_reset_form.cleaned_data['email']
+			associated_users = User.objects.filter(Q(email=data))
+			if associated_users.exists():
+				for user in associated_users:
+					subject = "Password Reset Requested"
+					email_template_name = "passwords/password_reset_email.txt"
+					c = {
+					"email":user.email,
+					'domain':'127.0.0.1:8000',
+					'site_name': 'Website',
+					"uid": urlsafe_base64_encode(force_bytes(user.pk)),
+					"user": user,
+					'token': default_token_generator.make_token(user),
+					'protocol': 'http',
+					}
+					email = render_to_string(email_template_name, c)
+					try:
+						print(f'Email: {user.email}')
+						message = Mail(from_email='schoolpostmk1@gmail.com',to_emails=[user.email],subject=subject,html_content=email)
+						try:
+							sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
+							response = sg.send(message)
+							print(response.status_code)
+							print(response.body)
+							print(response.headers)
+						except Exception as e:
+							print(e.message)
+					except BadHeaderError:
+						return HttpResponse('Invalid header found.')
+					return redirect ("/password_reset/done/")
+	password_reset_form = PasswordResetForm()
+	return render(request=request, template_name="passwords/password_reset.html", context={"password_reset_form":password_reset_form})

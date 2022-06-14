@@ -1,0 +1,22 @@
+{% extends 'sidebar/sidebar.html' %}
+{% block item %}
+{% load static %}
+{% load crispy_forms_tags %}
+<style type="text/css">
+	label {
+		color: #001D6E;
+	}
+
+	.title-bg {
+		background-color: #7FB5FF;
+	}
+
+</style>
+<h5 class="p-2 m-2 shadow-sm bg-light col-md-8 col-lg-8" style="color: #001D6E;">Total Money Circulation In Classroom Economy</h5>
+<div class="container col-md-8 col-lg-8 m-2">
+	<h1 class="">{{total}}</h1>
+<button class="btn float-end" style="background-color:#001D6E;"><a class="text-decoration-none" style="color:white;" href="{% url 'bill' user.id%}">Back</a></button>
+</div>
+
+
+{% endblock item %}

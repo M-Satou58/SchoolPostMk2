@@ -12,7 +12,7 @@
 	}
 
 </style>
-<h6 class="title-bg p-2 shadow-sm" style="color: white;">Item Store</h6>
+<h5 class="p-2 m-2 shadow-sm bg-light" style="color: #001D6E;">Item Store</h5>
 <div class="container">
     	{% if messages %}
     	{% for message in messages %}
@@ -35,7 +35,7 @@
 				<td>{{i.item}}</td>
 				<td>{{i.price}}</td>
 				<td>{{i.student}}</td>
-				<td><a href="{% url 'delete-item-store' i.pk user.id %}">Delete</a></td>
+				<td><a href="{% url 'delete-item-store' user.id i.id %}" style="color:crimson;">Delete</a></td>
 			</tr>
 			{% endfor %}
 		</table>
@@ -43,33 +43,14 @@
 
 <div class="col-md-4 col-lg-4">
 		
-		<h6 class="title-bg p-2 shadow-sm" style="color: white;">Buy Item</h6>
+		<h6 class="p-2 shadow-sm" style="color: white; background-color:#001D6E ;">Buy Item</h6>
 		<form method="POST">
 		  {% csrf_token %}
-		   
-		  <div class="mb-1">
-		    <label for="exampleInputEmail1" class="form-label">Item</label>
-		    {{form.item}}
-		  </div>
-
-		  <div class="mb-1">
-		    <label for="exampleInputEmail1" class="form-label">Price</label>
-		    {{form.price}}
-		  </div>
-
-		   <div class="mb-1">
-		    <label for="exampleInputEmail1" class="form-label">Name</label>
-		    <select class="form-select" aria-label="Default select example" title="student_assigned" name="student_assigned">
-			  <option selected>----------</option>
-			  {% for i in sa%}
-			  <option value="{{i}}">{{i}}</option>
-			  {% endfor %}
-			</select>
-		  </div>
+		  {{form}}
 		  
-		  <div class="btn-group float-end mt-3" role="group" aria-label="Basic example">
-			  <button type="submit" class="btn btn-primary">Submit</button>
-			  <button type="button" class="btn btn-danger"><a class="text-decoration-none" style="color:white;" href="{% url 'item-store' user.id %}">Cancel</button>
+		  <div class="btn-group float-end mt-2" role="group" aria-label="Basic example">
+			  <button type="submit" class="btn" style="background-color:#001D6E; color:white;">Submit</button>
+			  <button type="button" class="btn" style="background-color:crimson;"><a class="text-decoration-none" style="color:white;" href="{% url 'item-store' user.id %}">Cancel</button>
 			</div>
 		  
 		</form>

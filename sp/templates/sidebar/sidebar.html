@@ -6,7 +6,7 @@
             {% if user.is_authenticated %}
             <!-- Sidebar-->
             <div class="border-end bg-white" id="sidebar-wrapper">
-                <div class="sidebar-heading border-bottom bg-light m-auto text-center"style="color: #001D6E;"><img src="{{request.user.teacher.school_logo.url}}" style="width:100px;"></div>
+                <div class="sidebar-heading border-bottom m-auto text-start"style="color:white;background-color:#001D6E"><!-- <img src="{{request.user.teacher.school_logo.url}}" style="width: 55px;" class="me-2 rounded"> --><span>SCHOOLPOST</span></div>
 
                 <div class="list-group list-group-flush">
                     <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/"><img src="{% static 'icons/home_icon_001.png' %}"><span class="ms-2 "style="color: #001D6E;">Home</span></a>
@@ -16,6 +16,7 @@
                      
                     <a class="list-group-item list-group-item-action list-group-item-light p-3" href="{% url 'economy' %}"><img src="{% static 'icons/economy_icon_001.png' %}"><span class="ms-2 "style="color: #001D6E;">Economy</span></a>
                      {% endif %}
+                     {% if user.username != 'admin'%}
                     <a class="list-group-item list-group-item-action list-group-item-light p-3" data-bs-toggle="collapse" href="#collapseSettings" role="button" aria-expanded="false" aria-controls="collapseSettings">
                       <img src="{% static 'icons/settings_icon_001.png' %}"><span class="ms-2 "style="color: #001D6E;">Settings</span></a>
                     <!--COLLAPSE -->
@@ -25,6 +26,7 @@
                            <a class="list-group-item list-group-item-action list-group-item-light p-1" href="{% url 'school-settings' user.id %}"><span class="ms-2 "style="color: #001D6E;">School Settings</span></a>
                         </div>
                       </div>
+                    
                     <a class="list-group-item list-group-item-action list-group-item-light p-3" data-bs-toggle="collapse" href="#collapseSttings" role="button" aria-expanded="false" aria-controls="collapseSttings">
 
                     <img src="{% static 'icons/rules_icon_001.png' %}"><span class="ms-2 "style="color: #001D6E;">Rules</span></a>
@@ -47,22 +49,23 @@
                         </div>
                       </div>
                       <!--COLLAPSE -->
-                      <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#"><img src="{% static 'icons/shop_icon_001.png' %}" style="width:28px; height:28px;"><span class="ms-2 "style="color: #001D6E;">Item Store</span></a>
+                      <a class="list-group-item list-group-item-action list-group-item-light p-3" href="{% url 'item-store' user.id %}"><img src="{% static 'icons/shop_icon_001.png' %}" style="width:28px; height:28px;"><span class="ms-2 "style="color: #001D6E;">Item Store</span></a>
 
                       <a class="list-group-item list-group-item-action list-group-item-light p-3" data-bs-toggle="collapse" href="#collapseMaterial" role="button" aria-expanded="false" aria-controls="collapseMaterial">
                       <img src="{% static 'icons/materials_icon_001.png' %}"><span class="ms-2 "style="color: #001D6E;">Materials</span></a>
                     <!--COLLAPSE -->
                       <div class="collapse" id="collapseMaterial">
                         <div class="card card-body">
-                          <a class="list-group-item list-group-item-action list-group-item-light p-1" href="#"><span class="ms-2 "style="color: #001D6E;">Bill</span></a>
-                          <a class="list-group-item list-group-item-action list-group-item-light p-1" href="#"><span class="ms-2 "style="color: #001D6E;">Jobs</span></a>
-                          <a class="list-group-item list-group-item-action list-group-item-light p-1" href="#"><span class="ms-2 "style="color: #001D6E;">Business Envelopes</span></a>
-                          <a class="list-group-item list-group-item-action list-group-item-light p-1" href="#"><span class="ms-2 "style="color: #001D6E;">Rules</span></a>
-                          <a class="list-group-item list-group-item-action list-group-item-light p-1" href="#"><span class="ms-2 "style="color: #001D6E;">Certificate</span></a>
-                          <a class="list-group-item list-group-item-action list-group-item-light p-1" href="#"><span class="ms-2 "style="color: #001D6E;">Debriefing Session</span></a>
+                          <a class="list-group-item list-group-item-action list-group-item-light p-1" href="{% url 'bill' user.id %}"><span class="ms-2 "style="color: #001D6E;">Bill</span></a>
+                          <a class="list-group-item list-group-item-action list-group-item-light p-1" href="{% url 'print-jobs' user.id %}"><span class="ms-2 "style="color: #001D6E;">Jobs</span></a>
+                          <a class="list-group-item list-group-item-action list-group-item-light p-1" href="{% url 'print-business-envelope' user.id %}"><span class="ms-2 "style="color: #001D6E;">Business Envelopes</span></a>
+                          <a class="list-group-item list-group-item-action list-group-item-light p-1" href="{% url 'print-house-rules' user.id %}"><span class="ms-2 "style="color: #001D6E;">Rules</span></a>
+                          <a class="list-group-item list-group-item-action list-group-item-light p-1" href="{% url 'certificate' user.id %}"><span class="ms-2 "style="color: #001D6E;">Certificate</span></a>
+                          <a class="list-group-item list-group-item-action list-group-item-light p-1" href="{% url 'debriefing-session' user.id %}"><span class="ms-2 "style="color: #001D6E;">Debriefing Session</span></a>
                         </div>
                       </div>
                       <!--COLLAPSE -->
+                      {% endif %}
 
 
 
@@ -72,17 +75,17 @@
             <!-- Page content wrapper-->
             <div id="page-content-wrapper">
                 <!-- Top navigation-->
-                <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+                <nav class="navbar navbar-expand-lg navbar-dark border-bottom" style="background-color: #001D6E;">
                     <div class="container-fluid">
                         {% if user.is_authenticated %}
                         <button class="btn" id="sidebarToggle"><span class="navbar-toggler-icon"></span></button>
 
                         <div class="dropdown">
-                          <a class="btn dropdown-toggle" type="button" id="dropdownUserButton" data-bs-toggle="dropdown" aria-expanded="false">
+                          <a class="btn dropdown-toggle" type="button" id="dropdownUserButton" data-bs-toggle="dropdown" aria-expanded="false" style="color:white;">
                             <small>{{user.username}}</small>
                           </a>
                           <ul class="dropdown-menu" aria-labelledby="dropdownUserButton">
-                            <li><a class="dropdown-item" href="#">Logout</a></li>
+                            <li><a class="dropdown-item" href="{% url 'logout'%}">Logout</a></li>
                           </ul>
                         </div>
                         {% endif %}

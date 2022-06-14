@@ -12,7 +12,7 @@
 	}
 
 </style>
-<h6 class="title-bg p-2 shadow-sm" style="color: white;">Rent</h6>
+<h5 class="p-2 m-2 shadow-sm bg-light col-md-8 col-lg-8 text-center" style="color: #001D6E;">Rent</h5>
 <div class="container">
     	{% if messages %}
     	{% for message in messages %}
@@ -20,30 +20,30 @@
     	{% endfor %}
     	{% endif %}
     	</div>
-<form method="POST" class="col-md-6 col-lg-6 m-2">
+<form method="POST" class="col-md-8 col-lg-8 m-2">
 	{% csrf_token %}
-	<div class="mb-3">
+	<div class="mb-1">
 	    <label for="exampleInputEmail1" class="form-label">Start Date:</label>
 	    {{form.sdate}}
 	</div>
 
-	<div class="mb-3">
+	<div class="mb-1">
 	    <label for="exampleInputEmail1" class="form-label">End Date:</label>
 	    {{form.edate}}
 	</div>
 
-	<div class="mb-3">
+	<div class="mb-1">
 	    <label for="exampleInputEmail1" class="form-label">Posting:</label>
 	    {{form.posting}}
 	</div>
 
-	<div class="mb-3">
+	<div class="mb-1">
 	    <label for="exampleInputEmail1" class="form-label">Amount:</label>
 	    {{form.amount}}
 	</div>
-	<div class="btn-group float-end mt-3" role="group" aria-label="Basic example">
-			  <button type="submit" class="btn btn-primary">Submit</button>
-			  <button type="button" class="btn btn-danger"><a class="text-decoration-none" style="color:white;" href="{% url 'rent' user.id %}">Cancel</button>
+	<div class="btn-group float-end mt-2" role="group" aria-label="Basic example">
+			  <button type="submit" class="btn" style="background-color:#001D6E; color:white;">Submit</button>
+			  <button type="button" class="btn" style="background-color:crimson;"><a class="text-decoration-none" style="color:white;" href="{% url 'rent' user.id %}">Cancel</button>
 			</div>
 </form>
 

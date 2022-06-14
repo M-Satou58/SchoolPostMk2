@@ -1,6 +1,7 @@
 asgiref==3.5.2
 Babel==2.10.1
 Django==4.0.5
+django-auto-logout==0.5.0
 django-bootstrap-datepicker-plus==4.0.0
 django-crispy-forms==1.14.0
 django-environ==0.8.1
@@ -9,6 +10,9 @@ django-money==2.1.1
 gunicorn==20.1.0
 Pillow==9.1.1
 py-moneyed==1.2
+python-http-client==3.3.7
 pytz==2022.1
+sendgrid==6.9.7
 sqlparse==0.4.2
+starkbank-ecdsa==2.0.3
 whitenoise==6.2.0

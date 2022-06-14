@@ -12,12 +12,12 @@
 	}
 
 </style>
-<h6 class="title-bg p-2 shadow-sm" style="color: white;">Are you sure you wan't to delete <span style="color:red;">{{h.rule}}</span> ?</h6>
-<form action="{% url 'delete-house-rules' user.id h.id %}" method="POST">
+<h5 class="p-2 m-2 shadow-sm bg-light col-md-8 col-lg-8 text-center" style="color: #001D6E;">Are you sure you wan't to delete <span style="color:crimson;">{{h.rule}} ?</span></h5>
+<form action="{% url 'delete-house-rules' user.id h.id %}" class="col-md-8 col-lg-8 m-2" method="POST">
 	{% csrf_token %}
 	<div class="btn-group float-end mt-3" role="group" aria-label="Basic example">
-			  <button type="submit" class="btn btn-primary">Delete</button>
-			  <button type="button" class="btn btn-danger"><a class="text-decoration-none" style="color:white;" href="{% url 'house-rules' user.id %}">Cancel</button>
+			  <button type="submit" class="btn " style="background-color:#001D6E; color:white;">Delete</button>
+			  <button type="button" class="btn" style="background-color:crimson;"><a class="text-decoration-none" style="color:white;" href="{% url 'house-rules' user.id %}">Cancel</button>
 			</div>
 </form>
 {% endblock item %}

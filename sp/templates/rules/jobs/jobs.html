@@ -12,7 +12,7 @@
 	}
 
 </style>
-<h6 class="title-bg p-2 shadow-sm" style="color: white;">Jobs</h6>
+<h5 class="p-2 m-2 shadow-sm bg-light" style="color: #001D6E;">Jobs</h5>
 <div class="container">
     	{% if messages %}
     	{% for message in messages %}
@@ -39,22 +39,22 @@
 				<td>{{i.job_description}}</td>
 				<td>{{i.student_assigned.name}}</td>
 				<td>{{i.salary}}</td>
-				<td><a href="{% url 'update-jobs' user.id i.id %}" style="color:green;">Edit</a> | <a href="{% url 'delete-jobs' user.id i.id %}" style="color:red;">Delete</a></td>
+				<td><a href="{% url 'update-jobs' user.id i.id %}" style="color:limegreen;">Edit</a> | <a href="{% url 'delete-jobs' user.id i.id %}" style="color:crimson;">Delete</a></td>
 			</tr>
 			{% endfor %}
 		</table>
 	</div>
 
 	<div class="col-md-4 col-lg-4">
-		<h6 class="title-bg p-2 shadow-sm" style="color: white;">Add Jobs</h6>
+		<h6 class="p-2 shadow-sm" style="color: white; background-color: #001D6E;">Add Jobs</h6>
 		<form method="POST">
 		  {% csrf_token %}
 
 		   {{form}}
 
 		  <div class="btn-group float-end mt-3" role="group" aria-label="Basic example">
-			  <button type="submit" class="btn btn-primary">Submit</button>
-			  <button type="button" class="btn btn-danger"><a class="text-decoration-none" style="color:white;" href="{% url 'jobs' user.id %}">Cancel</button>
+			  <button type="submit" class="btn " style="color:white; background-color: #001D6E;">Submit</button>
+			  <button type="button" class="btn" style="background-color:crimson;"><a class="text-decoration-none" style="color:white;" href="{% url 'jobs' user.id %}">Cancel</button>
 			</div>
 		  
 		</form>

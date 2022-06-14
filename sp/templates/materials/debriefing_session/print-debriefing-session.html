@@ -1,0 +1,37 @@
+{% extends 'sidebar/sidebar.html' %}
+{% block item %}
+{% load static %}
+{% load crispy_forms_tags %}
+<style type="text/css">
+	label {
+		color: #001D6E;
+	}
+
+	.title-bg {
+		background-color: #7FB5FF;
+	}
+
+</style>
+<h5 class="p-2 m-2 shadow-sm bg-light" style="color: #001D6E;">Print Debriefing Session</h5>
+<div class="col-md-8 col-lg-8 m-2">
+	<div class="container card p-3">
+		<h5>Name: </h5>
+		<table class="table table-hover">
+			<thead>
+				<th>Question</th>
+			</thead>
+
+			{% for i in d %}
+			<tr>
+				<td>{{forloop.counter}}. {{i.question}}</td>
+			</tr>
+			{% endfor %}
+		</table>
+	</div>
+	<div class="btn-group float-end mt-3" role="group" aria-label="Basic example">
+			  <button type="submit" onclick="window.print();return false;" class="btn" style="background-color:#001D6E; color:white;">Print</button>
+			  <button type="button" class="btn" style="background-color:crimson;"><a class="text-decoration-none" style="color:white;" href="{% url 'debriefing-session' user.id %}">Back</button>
+			</div>
+	</div>
+
+{% endblock item %}

@@ -1,0 +1,46 @@
+{% extends 'sidebar/sidebar.html' %}
+{% block item %}
+{% load static %}
+{% load crispy_forms_tags %}
+<style type="text/css">
+	label {
+		color: #001D6E;
+	}
+
+	.title-bg {
+		background-color: #7FB5FF;
+	}
+
+	.name{
+		position: absolute;
+		top:40%;
+		left: 50%;
+		transform: translateX(-50%);
+	}
+
+	.teacher{
+		position: absolute;
+		top:74%;
+		left: 18%;
+	}
+
+	.date{
+		position: absolute;
+		top:74%;
+		left: 72%;
+	}
+
+</style>
+<div class="col-md-7 col-lg-7 position-absolute">
+	<img src="{% static 'img/certificate.png'%}" class="col-12">
+	<h3 class="name">{{c.student}}</h3>
+	<h5 class="teacher">{{c.teacher}}</h5>
+	<h5 class="date">{{c.date}}</h5>
+	<div class="btn-group float-end mt-2" role="group" aria-label="Basic example">
+			  <button onclick="window.print();return false;" class="btn" style="background-color:#001D6E; color:white;">Print</a>
+			  <button type="button" class="btn" style="background-color:crimson;"><a class="text-decoration-none" style="color:white;" href="{% url 'certificate' user.id %}">Back</button>
+			</div>
+	
+</div>
+
+{% endblock item %}

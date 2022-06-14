@@ -131,3 +131,41 @@ class Rent(models.Model):
         default_currency='PHP',
         max_digits=11)
 	date_created = models.DateTimeField(default=timezone.now, null=True)
+
+class ItemStore(models.Model):
+	teacher = models.CharField(max_length=200, null=True)
+	item = models.CharField(max_length=200, null=True)
+	price = MoneyField(
+        decimal_places=2,
+        default=0,
+        default_currency='PHP',
+        max_digits=11)
+	student = models.CharField(max_length=200, null=True)
+	date_created = models.DateTimeField(default=timezone.now, null=True)
+
+class Bill(models.Model):
+	teacher = models.CharField(max_length=200, null=True)
+	name = models.CharField(max_length=200, null=True)
+	value = MoneyField(
+        decimal_places=2,
+        default=0,
+        default_currency='PHP',
+        max_digits=11)
+	count = models.IntegerField()
+	total_value = MoneyField(
+        decimal_places=2,
+        default=0,
+        default_currency='PHP',
+        max_digits=11)
+	date_created = models.DateTimeField(default=timezone.now, null=True)
+
+class Certificate(models.Model):
+	student = models.CharField(max_length=200, null=True)
+	teacher = models.CharField(max_length=200, null=True)
+	date = models.DateField(null=True)
+	date_created = models.DateTimeField(default=timezone.now, null=True)
+
+class DebriefingSession(models.Model):
+	teacher = models.CharField(max_length=200, null=True)
+	question = models.TextField(max_length=1000, null=True)
+	date_created = models.DateTimeField(default=timezone.now, null=True)

@@ -1,0 +1,33 @@
+{% extends 'sidebar/sidebar.html' %}
+{% block item %}
+{% load static %}
+{% load crispy_forms_tags %}
+<style type="text/css">
+	label {
+		color: #001D6E;
+	}
+
+	.title-bg {
+		background-color: #7FB5FF;
+	}
+
+</style>
+<h5 class="p-2 m-2 shadow-sm bg-light" style="color: #001D6E;">Print House Rules</h5>
+<div class="col-md-8 col-lg-8 m-2">
+		<table class="table table-hover">
+			<thead>
+				<th>House Rules</th>
+				<th>Fines</th>
+			</thead>
+
+			{% for i in h %}
+			<tr>
+				<td>{{i.rule}}</td>
+				<td>{{i.fine}}</td>
+			</tr>
+			{% endfor %}
+		</table>
+		<button onclick="window.print();return false;" class="btn float-end" style="background-color:#001D6E; color:white;">Print</a>
+	</div>
+
+{% endblock item %}

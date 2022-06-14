@@ -25,7 +25,7 @@
             <td>{% if j.name.grade_level == 0 %}Kinder{% else %}1{% endif %}</td>
             <td>{{j.name.section}}</td>
             <td>{{j.status}}</td>
-            <td><a href="{% url 'set-active-economy' j.id%}" style="color:green;">Active</a> | <a href="{% url 'set-inactive-economy' j.id %}" style="color:red;">Inactive</a></td>
+            <td><a href="{% url 'set-active-economy' j.id%}" style="color:limegreen;">Active</a> | <a href="{% url 'set-inactive-economy' j.id %}" style="color:crimson;">Inactive</a></td>
           </tr>
 
           {% else %}
@@ -35,7 +35,7 @@
             <td>{% if j.name.grade_level == 0 %}Kinder{% else %}1{% endif %}</td>
             <td>{{j.name.section}}</td>
             <td>{{j.status}}</td>
-            <td><a href="{% url 'set-active-economy' j.id%}" style="color:green;">Active</a> | <a href="{% url 'set-inactive-economy' j.id %}" style="color:red;">Inactive</a></td>
+            <td><a href="{% url 'set-active-economy' j.id%}" style="color:limegreen;">Active</a> | <a href="{% url 'set-inactive-economy' j.id %}" style="color:crimson;">Inactive</a></td>
           </tr>
           {% endif %}
 

@@ -1,0 +1,25 @@
+<!--Wla ko maisip na pangalan wag nyu ko husgahan haha-->
+
+{% extends 'sidebar/sidebar.html' %}
+{% block item %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+<div class="row">
+	<div class="btn-group float-end mt-2" role="group" aria-label="Basic example">
+			  <button type="submit" class="btn" onclick="window.print();return false;" style="background-color:limegreen; color:white;">Submit</button>
+			  <button type="button" class="btn" style="background-color:crimson;"><a class="text-decoration-none" style="color:white;" href="{% url 'bill' user.id %}">Back</button>
+			</div>
+</div>
+<div class="row">	
+	{% for i in twenty %}
+	<div class="col-6">
+		<div class="card p-3 m-2" style="background-color:#001D6E; color:white;">
+			<h1 class="text-start">{{bill.value}}</h1>
+			<h1 class="text-center">{{bill.value}}</h1>
+		<h1 class="text-end">2022</h1>
+		</div>
+	</div>
+	{% endfor %}
+</div>
+{% endblock item %}

@@ -53,7 +53,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django_auto_logout.middleware.auto_logout',
 ]
+
 
 ROOT_URLCONF = 'schoolpost_project.urls'
 
@@ -68,6 +70,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django_auto_logout.context_processors.auto_logout_client',
             ],
         },
     },
@@ -117,7 +120,11 @@ USE_I18N = True
 
 USE_TZ = True
 
-
+from datetime import timedelta
+AUTO_LOGOUT = {'IDLE_TIME': 900,
+'REDIRECT_TO_LOGIN_IMMEDIATELY': True,
+'MESSAGE': 'You have been logged out due to inactivity.',
+}
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
