@@ -25,6 +25,8 @@ from sendgrid.helpers.mail import Mail
 
 from django.contrib.auth import authenticate, login
 
+from djmoney.money import Money
+
 # Create your views here.
 def indexView(request):
 	context = {}
@@ -130,6 +132,7 @@ def economyView(request):
 				print(f'Loop {i}')
 				if StudentEconomy.objects.filter(name=student.get(id=i), teacher=teacher):
 					print('Student already exists')
+
 				else:
 					StudentEconomy(name=student.get(id=i), teacher=teacher).save()
 					se = StudentEconomy.objects.get(name=student.get(id=i), teacher=teacher)
@@ -139,6 +142,7 @@ def economyView(request):
 					e.student.add(StudentEconomy.objects.get(name=student.get(id=i), teacher=teacher))
 					e.save()
 					print('Student Added')
+					messages.success(request, f'Student: {student.get(id=i)} successfully added to economy')
 			return redirect('/economy/')
 		else:
 			print('invalid form')
@@ -212,17 +216,23 @@ def jobsView(request, user):
 			student_assigned = form.cleaned_data['student_assigned']
 
 			s = StudentEconomy.objects.get(name=student_assigned.name.id, teacher=teacher)
-			Job(teacher=teacher, job=job, suggested_per_class=suggested_per_class, job_description=job_description, salary=salary, student_assigned=s).save()
-			print('Job Created')
 
-			s.jobs = job
-			s.salary = salary
-			s.balance = s.balance + s.salary
-			s.save()
+			isMax = s.balance + salary
+			if isMax > Money(100, 'PHP'):
+				messages.error(request, 'Student reached maximum balance ₱100.')
 
-			messages.success(request, 'Job added successfully!')
-			print(f'Jobs: {s.jobs} Salary:')
-			print('Job Success')
+			else:	
+				Job(teacher=teacher, job=job, suggested_per_class=suggested_per_class, job_description=job_description, salary=salary, student_assigned=s).save()
+				print('Job Created')
+
+				s.jobs = job
+				s.salary = salary
+				s.balance = s.balance + s.salary
+				s.save()
+
+				messages.success(request, 'Job added successfully!')
+				print(f'Jobs: {s.jobs} Salary:')
+				print('Job Success')
 			
 		else:
 			messages.success(request, 'Student Already has a job!')
@@ -239,7 +249,6 @@ def jobsView(request, user):
 def updateJobsView(request, user, pk):
 	jobs = Job.objects.get(id=pk)
 	teacher = Teacher.objects.get(user=user)
-
 	form = UpdateJobsForm()
 	if request.method == 'POST':
 		form = UpdateJobsForm(request.POST)
@@ -250,30 +259,32 @@ def updateJobsView(request, user, pk):
 			salary = form.cleaned_data['salary']
 			job_description = form.cleaned_data['job_description']
 
-			
 
-
-			jobs.job = job
-			jobs.suggested_per_class = suggested_per_class
-			jobs.salary = salary
-			jobs.job_description = job_description
-			jobs.save()
-
-			
 			s = StudentEconomy.objects.get(name=jobs.student_assigned.name)
-			s.jobs = job
-			s.balance = s.balance + salary
-			s.salary = salary
-			print(f'Student" {s}')
-			print(s.jobs)
-			print(s.salary)
-			s.save()
+			isMax = s.balance + salary
+			if isMax > Money(100, 'PHP'):
+				messages.error(request, 'Student reached maximum balance ₱100.')
+				return redirect(f'/rules/jobs/{user}/')
 
+			else:	
 
+				jobs.job = job
+				jobs.suggested_per_class = suggested_per_class
+				jobs.salary = salary
+				jobs.job_description = job_description
+				jobs.save()
 
+				
+				s.jobs = job
+				s.balance = s.balance + salary
+				s.salary = salary
+				print(f'Student" {s}')
+				print(s.jobs)
+				print(s.salary)
+				s.save()
 
-			messages.success(request, 'Jobs successfully updated!')
-			return redirect(f'/rules/jobs/{user}/')
+				messages.success(request, 'Jobs successfully updated!')
+				return redirect(f'/rules/jobs/{user}/')
 
 		else:
 			print('Invalid Form')
@@ -306,13 +317,19 @@ def opportunitiesView(request, user):
 			activity = form.cleaned_data['activity']
 			amount = form.cleaned_data['amount']
 			student = form.cleaned_data['student']
-			Opportunitie(teacher=teacher, activity=activity, amount=amount, student=student).save()
 
 			s = StudentEconomy.objects.get(teacher=teacher, name=student.name.id)
-			s.balance = s.balance + amount
-			s.save()
-			messages.success(request, 'Opportunities successfully added!')
-			return redirect(f'/rules/opportunities/{user}/')
+			isMax = s.balance + amount
+			if isMax > Money(100, 'PHP'):
+				messages.error(request, 'Student reached maximum balance ₱100.')
+				return redirect(f'/rules/opportunities/{user}/')
+
+			else:
+				Opportunitie(teacher=teacher, activity=activity, amount=amount, student=student).save()
+				s.balance = s.balance + amount
+				s.save()
+				messages.success(request, 'Opportunities successfully added!')
+				return redirect(f'/rules/opportunities/{user}/')
 
 	opportunities = Opportunitie.objects.filter(teacher=teacher)
 	form = CreateOpportunitiesForm(teacher)
@@ -331,13 +348,20 @@ def updateOpportunitiesView(request, user, pk):
 			amount = form.cleaned_data['amount']
 			student = form.cleaned_data['student']
 			total = opportunities.amount - amount
+			
 			s = StudentEconomy.objects.get(teacher=teacher, name=student.name.id)
-			s.balance = s.balance + total
-			s.save()
-			form.save()
+			isMax = s.balance + amount
+			if isMax > Money(100, 'PHP'):
+				messages.error(request, 'Student reached maximum balance ₱100.')
+				return redirect(f'/rules/opportunities/{user}/')
 
-			messages.success(request, f'{opportunities.activity} successfully updated!')
-			return redirect(f'/rules/opportunities/{user}')
+			else:
+				s.balance = s.balance + total
+				s.save()
+				form.save()
+
+				messages.success(request, f'{opportunities.activity} successfully updated!')
+				return redirect(f'/rules/opportunities/{user}')
 
 	context = {'form':form, 'opportunities':opportunities}
 	return render(request, 'rules/opportunities/update-opportunities.html', context)
@@ -362,13 +386,18 @@ def houseRulesView(request, user):
 			fine = form.cleaned_data['fine']
 			student = form.cleaned_data['student']
 
-			HouseRule(teacher=teacher, rule=rule, fine=fine, student=student).save()
-			s = StudentEconomy.objects.get(teacher=teacher, name=student.name.id)
-			s.spend = s.spend + fine
-			s.balance = s.balance - fine
-			s.save()
-			messages.success(request, 'House Rules successfully added!')
-			return redirect(f'/rules/house-rules/{user}/')
+			if student == None:
+				print('Student None')
+			else:
+				print(f'Student {student}')
+
+			# HouseRule(teacher=teacher, rule=rule, fine=fine, student=student).save()
+			# s = StudentEconomy.objects.get(teacher=teacher, name=student.name.id)
+			# s.spend = s.spend + fine
+			# s.balance = s.balance - fine
+			# s.save()
+			# messages.success(request, 'House Rules successfully added!')
+			# return redirect(f'/rules/house-rules/{user}/')
 
 	h = HouseRule.objects.filter(teacher=teacher)
 	form = CreateHouseRulesForm(teacher)
@@ -456,7 +485,7 @@ def itemStoreView(request, user):
 				messages.error(request,'Insuffiecient funds!')
 			else:
 				ItemStore(teacher=teacher, item=item, price=price, student=student).save()			
-				se.purchased = f'{se.purchased} ,{item}'
+				se.purchased = f'{se.purchased} {item},'
 				se.balance = se.balance - price
 				se.spend = se.spend + price
 				se.save()
@@ -487,22 +516,47 @@ def billView(request, user):
 
 	if request.method == 'POST':
 		form = BillForm(teacher, request.POST)
+
 		if form.is_valid():
 			print('Form is valid')
 
 			name = form.cleaned_data['name']
 			value = form.cleaned_data['value']
 			count = form.cleaned_data['count']
+			
+
+			if value == '10':
+				value = Money(10, 'PHP')
+			if value == '20':
+				value = Money(20, 'PHP')
+			if value == '50':
+				value = Money(50, 'PHP')
+			if value == '100':
+				value = Money(100, 'PHP')
+
+
 			total_value = value * count
 
-			se = StudentEconomy.objects.get(name=name.name.id, teacher=teacher)
-			Bill(teacher=teacher, name=name, value=value, count=count, total_value=total_value).save()
+			print(f'Name: {name}')
+			print(f'Value: {value}')
+			print(f'Count: {count}')
+			print(f'Total Value: {total_value}')
 
-			se.balance = se.balance + total_value
-			se.save()
-			messages.success(request, 'Bill successfully added!')
-			print(f'Student: {se} balance:{se.balance}')
-			return redirect(f'/materials/bill/{user}')
+			se = StudentEconomy.objects.get(name=name.name.id, teacher=teacher)
+			if se.balance < total_value:
+				messages.error(request,'Insuffiecient funds!')
+			else:
+
+				Bill(teacher=teacher, name=name, value=value, count=count, total_value=total_value).save()
+
+				se.balance = se.balance - total_value
+				se.spend = se.spend + total_value
+				se.save()
+				messages.success(request, 'Bill successfully added!')
+				print(f'Student: {se} balance:{se.balance}')
+				return redirect(f'/materials/bill/{user}')
+
+				print(f'Value {value}')
 
 		else:
 			print('Invalid Form')
@@ -525,9 +579,13 @@ def moneyCirculationView(request, user):
 @login_required(login_url='/')
 def printBillView(request, user, pk):
 	bill = Bill.objects.get(id=pk)
+	count_range = []
+	for i in range(bill.count):
+		count_range.append(i)
 
-	context = {'bill':bill}
+	context = {'bill':bill, 'count_range':count_range}
 	return render(request, 'materials/bill/print-bill.html', context)
+
 
 @login_required(login_url='/')
 def printTenBillsView(request, user, pk):
@@ -660,8 +718,8 @@ def password_reset_request(request):
 					email = render_to_string(email_template_name, c)
 					try:
 						print(f'Email: {user.email}')
-						print(f'From: {settings.EMAIL_HOST_USER}')
-						send_mail(subject=subject, message=email, from_email='schoolpostmk1@gmail.com', recipient_list=[user.email], fail_silently=False)
+						print(f'From: {settings.DEFAULT_FROM_EMAIL}')
+						send_mail(subject=subject, message=email, from_email=settings.DEFAULT_FROM_EMAIL, recipient_list=[user.email], fail_silently=False)
 						print('It Worked!')
 					except BadHeaderError:
 						return HttpResponse('Invalid header found.')

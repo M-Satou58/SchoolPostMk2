@@ -5,6 +5,7 @@ from django.contrib.auth.forms import UserCreationForm
 from bootstrap_datepicker_plus.widgets import DatePickerInput, TimePickerInput, DateTimePickerInput, MonthPickerInput, YearPickerInput
 from django.contrib.admin.widgets import AdminDateWidget
 from django.forms.fields import DateField
+
 from .models import *
 
 
@@ -118,6 +119,8 @@ class CreateHouseRulesForm(ModelForm):
 		self.fields['fine'].widget.attrs['class'] = 'form-control'
 		self.fields['student'] = forms.ModelChoiceField(queryset=StudentEconomy.objects.filter(teacher=teacher, status='Active'))
 		self.fields['student'].widget.attrs['class'] = 'form-control'
+
+
 
 from django.forms.widgets import NumberInput
 class RentForm(forms.ModelForm):

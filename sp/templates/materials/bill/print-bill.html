@@ -38,19 +38,45 @@
 	</div>
 
 	<div class="col-md-4 col-lg-4">
-		<a href="#" class="text-decoration-none" style="color:white;"><h6 class="p-2 shadow-sm" style="background-color:#001D6E;">Return to main bill page</h6></a>
-		<a href="{% url 'print-bill-10' user.id bill.id %}" class="text-decoration-none" style="color:white;"><h6 class="p-2 shadow-sm" style="background-color:#001D6E;">Print large (10 per page)</h6></a>
-		<a href="{% url 'print-bill-20' user.id bill.id %}" class="text-decoration-none" style="color:white;"><h6 class="p-2 shadow-sm" style="background-color:#001D6E;">Print large (20 per page)</h6></a>
+		<a href="#" class="text-decoration-none" style="color:white;"><h6 class="p-2 shadow-sm text-center" style="background-color:#001D6E;">Return to main bill page</h6></a>
+		<a href="#" class="text-decoration-none" style="color:white;" onclick="window.print();return false;"><h6 class="p-2 shadow-sm text-center" style="background-color:limegreen;">Print</h6></a>
+
 	</div>
 </div>
 
-
 <div class="container m-2">
 <h5>Sample Bill</h5>
-<div class="card p-3 m-2 col-md-5 col-lg-5" style="background-color:#001D6E; color:white">
+<div class="row">
+{% for i in count_range%}
+{% if bill.value == '₱10.00' %}
+<div class="card p-3 m-2 col-5" style="background-color:brown; color:white">
 	<h1 class="text-start">{{bill.value}}</h1>
 	<h1 class="text-center">{{bill.value}}</h1>
 	<h1 class="text-end">2022</h1>
+</div>
+{% endif %}
+{% if bill.value == '₱20.00' %}
+<div class="card p-3 m-2 col-5" style="background-color:orange; color:white">
+	<h1 class="text-start">{{bill.value}}</h1>
+	<h1 class="text-center">{{bill.value}}</h1>
+	<h1 class="text-end">2022</h1>
+</div>
+{% endif %}
+{% if bill.value == '₱50.00' %}
+<div class="card p-3 m-2 col-5" style="background-color:lightpink; color:white">
+	<h1 class="text-start">{{bill.value}}</h1>
+	<h1 class="text-center">{{bill.value}}</h1>
+	<h1 class="text-end">2022</h1>
+</div>
+{% endif %}
+{% if bill.value == '₱100.00' %}
+<div class="card p-3 m-2 col-5" style="background-color:purple; color:white">
+	<h1 class="text-start">{{bill.value}}</h1>
+	<h1 class="text-center">{{bill.value}}</h1>
+	<h1 class="text-end">2022</h1>
+</div>
+{% endif %}
+{% endfor %}
 </div>
 </div>
 

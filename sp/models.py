@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 from djmoney.models.fields import MoneyField
-
+from djmoney.money import Money
 # Create your models here.
 
 class Teacher(models.Model):
@@ -38,7 +38,7 @@ class Student(models.Model):
 class StudentEconomy(models.Model):
 	name = models.ForeignKey(Student, null=True, on_delete=models.CASCADE)
 	teacher = models.CharField(max_length=200, null=True)
-	jobs = models.CharField(max_length=200, null=True)
+	jobs = models.CharField(max_length=200, default='',null=True)
 	spend = MoneyField(
         decimal_places=2,
         default=0,
@@ -51,7 +51,7 @@ class StudentEconomy(models.Model):
         default_currency='PHP',
         max_digits=11
     )    
-	purchased = models.CharField(max_length=200, null=True)
+	purchased = models.CharField(max_length=200, default='', null=True)
 	status = models.CharField(max_length=200, null=True)
 	date_created = models.DateTimeField(default=timezone.now, null=True)
 	def __str__(self):
@@ -146,13 +146,15 @@ class ItemStore(models.Model):
 	date_created = models.DateTimeField(default=timezone.now, null=True)
 
 class Bill(models.Model):
+	BILL_CHOICES = (
+    ('10', (Money(10, 'PHP'))),
+    ('20', (Money(20, 'PHP'))),
+    ('50', (Money(50, 'PHP'))),
+    ('100', (Money(100, 'PHP'))),
+)
 	teacher = models.CharField(max_length=200, null=True)
 	name = models.CharField(max_length=200, null=True)
-	value = MoneyField(
-        decimal_places=2,
-        default=0,
-        default_currency='PHP',
-        max_digits=11)
+	value = models.CharField(choices=BILL_CHOICES, default=10, max_length=200, null=True)
 	count = models.IntegerField()
 	total_value = MoneyField(
         decimal_places=2,
