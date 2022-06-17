@@ -56,7 +56,7 @@ class StudentEconomy(models.Model):
 	date_created = models.DateTimeField(default=timezone.now, null=True)
 	def __str__(self):
 		return f'{self.name.last_name} {self.name.first_name}'
-	money = MoneyField(
+	balance = MoneyField(
         decimal_places=2,
         default=0,
         default_currency='PHP',
@@ -90,6 +90,7 @@ class Job(models.Model):
 class Opportunitie(models.Model):
 	teacher = models.CharField(max_length=200, null=True)
 	activity = models.TextField(max_length=1000, null=True)
+	student = models.CharField(max_length=200, null=True)
 	amount = MoneyField(
         decimal_places=2,
         default=0,
@@ -103,6 +104,7 @@ class Opportunitie(models.Model):
 class HouseRule(models.Model):
 	teacher = models.CharField(max_length=200, null=True)
 	rule = models.TextField(max_length=1000, null=True)
+	student = models.CharField(max_length=200, null=True)
 	fine = MoneyField(
         decimal_places=2,
         default=0,

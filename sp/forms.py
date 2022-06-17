@@ -98,22 +98,26 @@ class UpdateJobsForm(ModelForm):
 class CreateOpportunitiesForm(ModelForm):
 	class Meta:
 		model = Opportunitie
-		fields = ['activity', 'amount']
+		fields = ['activity', 'amount', 'student']
 
-	def __init__(self, *args, **kwargs):
+	def __init__(self, teacher,*args, **kwargs):
 		super(CreateOpportunitiesForm, self).__init__(*args, **kwargs)
 		self.fields['activity'].widget.attrs['class'] = 'form-control'
 		self.fields['amount'].widget.attrs['class'] = 'form-control'
+		self.fields['student'] = forms.ModelChoiceField(queryset=StudentEconomy.objects.filter(teacher=teacher, status='Active'))
+		self.fields['student'].widget.attrs['class'] = 'form-control'
 
 class CreateHouseRulesForm(ModelForm):
 	class Meta:
 		model = HouseRule
-		fields = ['rule', 'fine']
+		fields = ['rule', 'fine', 'student']
 
-	def __init__(self, *args, **kwargs):
+	def __init__(self, teacher,*args, **kwargs):
 		super(CreateHouseRulesForm, self).__init__(*args, **kwargs)
 		self.fields['rule'].widget.attrs['class'] = 'form-control'
 		self.fields['fine'].widget.attrs['class'] = 'form-control'
+		self.fields['student'] = forms.ModelChoiceField(queryset=StudentEconomy.objects.filter(teacher=teacher, status='Active'))
+		self.fields['student'].widget.attrs['class'] = 'form-control'
 
 from django.forms.widgets import NumberInput
 class RentForm(forms.ModelForm):

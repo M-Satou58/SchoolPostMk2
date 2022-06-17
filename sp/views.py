@@ -23,14 +23,50 @@ import os
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
 
+from django.contrib.auth import authenticate, login
+
 # Create your views here.
 def indexView(request):
 	context = {}
 	return render(request, 'main/index01.html', context)
 
 def teacherLoginView(request):
+	if request.method == 'POST':
+		username = request.POST['username']
+		password = request.POST['password']
+		user = authenticate(request, username=username, password=password)
+		if user is not None:
+			if username == 'admin':
+				messages.error(request,'Invalid Credentials')
+
+			else:
+				login(request, user)
+				return redirect('/')
+		else:
+			messages.error(request,'Invalid Credentials')
+
+
 	context = {}
 	return render(request, 'login/teacher-login.html', context)
+
+def adminLoginView(request):
+	if request.method == 'POST':
+		username = request.POST['username']
+		password = request.POST['password']
+		user = authenticate(request, username=username, password=password)
+		if user is not None:
+			if username != 'admin':
+				print('Yeah')
+				messages.error(request,'Invalid Credentials')
+
+			else:
+				login(request, user)
+				return redirect('/')
+
+		else:
+			messages.error(request,'Invalid Credentials')
+	context = {}
+	return render(request, 'login/admin-login.html', context)
 
 @login_required(login_url='/')
 def registerTeacherView(request):
@@ -181,6 +217,7 @@ def jobsView(request, user):
 
 			s.jobs = job
 			s.salary = salary
+			s.balance = s.balance + s.salary
 			s.save()
 
 			messages.success(request, 'Job added successfully!')
@@ -213,14 +250,19 @@ def updateJobsView(request, user, pk):
 			salary = form.cleaned_data['salary']
 			job_description = form.cleaned_data['job_description']
 
+			
+
+
 			jobs.job = job
 			jobs.suggested_per_class = suggested_per_class
 			jobs.salary = salary
 			jobs.job_description = job_description
 			jobs.save()
 
+			
 			s = StudentEconomy.objects.get(name=jobs.student_assigned.name)
 			s.jobs = job
+			s.balance = s.balance + salary
 			s.salary = salary
 			print(f'Student" {s}')
 			print(s.jobs)
@@ -245,7 +287,7 @@ def deleteJobsView(request, user, pk):
 	jobs = Job.objects.get(id=pk)
 	se = StudentEconomy.objects.get(name=jobs.student_assigned.name)
 	if request.method == 'POST':
-		se.jobs = ''
+		se.jobs = 'None'
 		se.salary = 0
 		se.save()
 		jobs.delete()
@@ -259,27 +301,41 @@ def deleteJobsView(request, user, pk):
 def opportunitiesView(request, user):
 	teacher = Teacher.objects.get(user=user)
 	if request.method == 'POST':
-		form = CreateOpportunitiesForm(request.POST)
+		form = CreateOpportunitiesForm(teacher,request.POST)
 		if form.is_valid():
 			activity = form.cleaned_data['activity']
 			amount = form.cleaned_data['amount']
-			Opportunitie(teacher=teacher, activity=activity, amount=amount).save()
+			student = form.cleaned_data['student']
+			Opportunitie(teacher=teacher, activity=activity, amount=amount, student=student).save()
+
+			s = StudentEconomy.objects.get(teacher=teacher, name=student.name.id)
+			s.balance = s.balance + amount
+			s.save()
 			messages.success(request, 'Opportunities successfully added!')
 			return redirect(f'/rules/opportunities/{user}/')
 
 	opportunities = Opportunitie.objects.filter(teacher=teacher)
-	form = CreateOpportunitiesForm()
+	form = CreateOpportunitiesForm(teacher)
 	context = {'form':form, 'opportunities':opportunities}
 	return render(request, 'rules/opportunities/opportunities.html', context)
 
 @login_required(login_url='/')
 def updateOpportunitiesView(request, user, pk):
 	opportunities = Opportunitie.objects.get(id=pk)
-	form = CreateOpportunitiesForm(instance=opportunities)
+	teacher = Teacher.objects.get(user=user)
+
+	form = CreateOpportunitiesForm(teacher,instance=opportunities)
 	if request.method == 'POST':
-		form = CreateOpportunitiesForm(request.POST, instance=opportunities)
+		form = CreateOpportunitiesForm(teacher, request.POST, instance=opportunities)
 		if form.is_valid():
+			amount = form.cleaned_data['amount']
+			student = form.cleaned_data['student']
+			total = opportunities.amount - amount
+			s = StudentEconomy.objects.get(teacher=teacher, name=student.name.id)
+			s.balance = s.balance + total
+			s.save()
 			form.save()
+
 			messages.success(request, f'{opportunities.activity} successfully updated!')
 			return redirect(f'/rules/opportunities/{user}')
 
@@ -300,26 +356,32 @@ def deleteOpportunitiesView(request, user, pk):
 def houseRulesView(request, user):
 	teacher = Teacher.objects.get(user=user)
 	if request.method == 'POST':
-		form = CreateHouseRulesForm(request.POST)
+		form = CreateHouseRulesForm(teacher,request.POST)
 		if form.is_valid():
 			rule = form.cleaned_data['rule']
 			fine = form.cleaned_data['fine']
+			student = form.cleaned_data['student']
 
-			HouseRule(teacher=teacher, rule=rule, fine=fine).save()
+			HouseRule(teacher=teacher, rule=rule, fine=fine, student=student).save()
+			s = StudentEconomy.objects.get(teacher=teacher, name=student.name.id)
+			s.spend = s.spend + fine
+			s.balance = s.balance - fine
+			s.save()
 			messages.success(request, 'House Rules successfully added!')
 			return redirect(f'/rules/house-rules/{user}/')
 
 	h = HouseRule.objects.filter(teacher=teacher)
-	form = CreateHouseRulesForm()
+	form = CreateHouseRulesForm(teacher)
 	context = {'form':form, 'h':h}
 	return render(request, 'rules/house-rules/house-rules.html', context)
 
 @login_required(login_url='/')
 def updateHouseRulesView(request, user, pk):
 	h = HouseRule.objects.get(id=pk)
-	form = CreateHouseRulesForm(instance=h)
+	teacher = Teacher.objects.get(user=user)
+	form = CreateHouseRulesForm(teacher,instance=h)
 	if request.method == 'POST':
-		form = CreateHouseRulesForm(request.POST, instance=h)
+		form = CreateHouseRulesForm(teacher,request.POST, instance=h)
 		if form.is_valid():
 			form.save()
 			messages.success(request, f'{h.rule} successfully updated!')
@@ -354,7 +416,8 @@ def rentView(request, user):
 			se = StudentEconomy.objects.all().filter(teacher=teacher)
 
 			for i in se:
-				i.money = i.money - amount
+				i.balance = i.balance - amount
+				i.spend = i.spend + amount
 				i.save()
 				print('Rent Success')
 
@@ -389,15 +452,15 @@ def itemStoreView(request, user):
 			student = form.cleaned_data['student']
 
 			se = StudentEconomy.objects.get(name=student.name.id, teacher=teacher)
-			if se.money < price:
+			if se.balance < price:
 				messages.error(request,'Insuffiecient funds!')
 			else:
 				ItemStore(teacher=teacher, item=item, price=price, student=student).save()			
 				se.purchased = f'{se.purchased} ,{item}'
-				se.money = se.money - price
+				se.balance = se.balance - price
 				se.spend = se.spend + price
 				se.save()
-				print(f'Student: {se.name} Money: {se.money} Item: {se.purchased}')
+				print(f'Student: {se.name} balance: {se.balance} Item: {se.purchased}')
 				messages.success(request, 'Item added successfully!')
 				return redirect(f'/item-store/{user}/')
 		else:
@@ -435,10 +498,10 @@ def billView(request, user):
 			se = StudentEconomy.objects.get(name=name.name.id, teacher=teacher)
 			Bill(teacher=teacher, name=name, value=value, count=count, total_value=total_value).save()
 
-			se.money = se.money + total_value
+			se.balance = se.balance + total_value
 			se.save()
 			messages.success(request, 'Bill successfully added!')
-			print(f'Student: {se} Money:{se.money}')
+			print(f'Student: {se} balance:{se.balance}')
 			return redirect(f'/materials/bill/{user}')
 
 		else:
@@ -597,15 +660,9 @@ def password_reset_request(request):
 					email = render_to_string(email_template_name, c)
 					try:
 						print(f'Email: {user.email}')
-						message = Mail(from_email='schoolpostmk1@gmail.com',to_emails=[user.email],subject=subject,html_content=email)
-						try:
-							sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
-							response = sg.send(message)
-							print(response.status_code)
-							print(response.body)
-							print(response.headers)
-						except Exception as e:
-							print(e.message)
+						print(f'From: {settings.EMAIL_HOST_USER}')
+						send_mail(subject=subject, message=email, from_email='schoolpostmk1@gmail.com', recipient_list=[user.email], fail_silently=False)
+						print('It Worked!')
 					except BadHeaderError:
 						return HttpResponse('Invalid header found.')
 					return redirect ("/password_reset/done/")

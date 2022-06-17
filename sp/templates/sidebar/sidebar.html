@@ -12,18 +12,17 @@
                     <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/"><img src="{% static 'icons/home_icon_001.png' %}"><span class="ms-2 "style="color: #001D6E;">Home</span></a>
                     {% if user.username == 'admin' %}
                     <a class="list-group-item list-group-item-action list-group-item-light p-3" href="{% url 't-register'%}"><img src="{% static 'icons/teacher_icon_002.png' %}"><span class="ms-2 "style="color: #001D6E;">Teacher</span></a>
-                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="{% url 's-register'%}"><img src="{% static 'icons/student_icon_001.png' %}"><span class="ms-2 "style="color: #001D6E;">Student</span></a>
-                     
+                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="{% url 's-register'%}"><img src="{% static 'icons/student_icon_001.png' %}"><span class="ms-2 "style="color: #001D6E;">Student</span></a> 
                     <a class="list-group-item list-group-item-action list-group-item-light p-3" href="{% url 'economy' %}"><img src="{% static 'icons/economy_icon_001.png' %}"><span class="ms-2 "style="color: #001D6E;">Economy</span></a>
-                     {% endif %}
-                     {% if user.username != 'admin'%}
+                    {% endif %}
+                     {% if user.username != 'admin' %}
                     <a class="list-group-item list-group-item-action list-group-item-light p-3" data-bs-toggle="collapse" href="#collapseSettings" role="button" aria-expanded="false" aria-controls="collapseSettings">
                       <img src="{% static 'icons/settings_icon_001.png' %}"><span class="ms-2 "style="color: #001D6E;">Settings</span></a>
-                    <!--COLLAPSE -->
+                    
                       <div class="collapse" id="collapseSettings">
                         <div class="card card-body">
                           <a class="list-group-item list-group-item-action list-group-item-light p-1" href="{% url 'account-settings' %}"><span class="ms-2 "style="color: #001D6E;">Account Settings</span></a>
-                           <a class="list-group-item list-group-item-action list-group-item-light p-1" href="{% url 'school-settings' user.id %}"><span class="ms-2 "style="color: #001D6E;">School Settings</span></a>
+                          <!--  <a class="list-group-item list-group-item-action list-group-item-light p-1" href="{% url 'school-settings' user.id %}"><span class="ms-2 "style="color: #001D6E;">School Settings</span></a> -->
                         </div>
                       </div>
                     
@@ -41,7 +40,7 @@
                       </div>
                       <!--COLLAPSE -->
                       <a class="list-group-item list-group-item-action list-group-item-light p-3" data-bs-toggle="collapse" href="#collapseMonitor" role="button" aria-expanded="false" aria-controls="collapseMonitor">
-                      <img src="{% static 'icons/monitor_icon_001.png' %}"><span class="ms-2 "style="color: #001D6E;">Monitor</span></a>
+                      <img src="{% static 'icons/monitor_icon_001.png' %}"><span class="ms-2 "style="color: #001D6E;">Monitoring</span></a>
                     <!--COLLAPSE -->
                       <div class="collapse" id="collapseMonitor">
                         <div class="card card-body">
@@ -66,6 +65,7 @@
                       </div>
                       <!--COLLAPSE -->
                       {% endif %}
+                      
 
 
 

@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'sp',
+    'django_extensions',
     'crispy_forms',
     'django_filters',
     'djmoney',
@@ -136,6 +137,13 @@ LOGIN_REDIRECT_URL = "/"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
+EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIL_HOST_USER = 'apikey' # this is exactly the value 'apikey'
+EMAIL_HOST_PASSWORD = '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' # this is your API key
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+DEFAULT_FROM_EMAIL = 'schoolpostmk1@gmail.com' # this is the sendgrid email
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 

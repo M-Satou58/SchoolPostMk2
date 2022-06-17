@@ -1,0 +1,41 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% block content %}
+{% load crispy_forms_tags %} 
+<div class="container-fluid row m-auto col-md-8 col-lg-8 m-3 p-3 mt-3 shadow">
+	<div class="col-md-6 col-lg-6 ">
+		<button class="btn m-3 shadow-sm" style="position: absolute; background-color:#001D6E;"><a href="/" style="color:white;" class="text-shadow text-decoration-none" ><small>Home</small></a></button>
+		<img src="{% static 'img/splash-screen.png'%}" style="width:100%;">
+	</div>
+	<div class="col-md-6 col-lg-6">
+		<div class="container text-center mt-3">
+			<img src="{% static 'logo/logo_002.png' %}" style="width:100px;">
+			<h2 style="color:#001D6E;">SCHOOLPOST</h2>
+		</div>
+		<h3 class="mt-3" style="color:#001D6E;">Admin Login</h3>
+		<div class="container">
+    	{% if messages %}
+    	{% for message in messages %}
+    		<div class="alert alert-danger">{{message}}</div>
+    	{% endfor %}
+    	{% endif %}
+    </div>
+
+		<form method="POST">
+		{% csrf_token %}
+
+		<div class="mb-1">
+		    <label for="username" class="form-label" style="color:#001D6E;">Username: </label>
+		    <input type="text" class="form-control" id="username" name="username"aria-describedby="username" required=True>
+		</div>
+		<div class="mb-1">
+		    <label for="password" class="form-label" style="color:#001D6E;">Password: </label>
+		    <input type="password" class="form-control" id="password" name="password" required=True>
+		</div>
+		<button type="submit" class="btn mt-2 p-2 col-12" style="background-color:#001D6E; color:white;">Login Now</button>
+		</form>
+
+		
+	</div>
+</div>
+{% endblock content %}

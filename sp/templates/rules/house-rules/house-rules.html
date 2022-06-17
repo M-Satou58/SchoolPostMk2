@@ -26,6 +26,7 @@
 			<thead>
 				<th>House Rules</th>
 				<th>Fines</th>
+				<th>Student</th>
 				<th>Action</th>
 			</thead>
 
@@ -33,6 +34,7 @@
 			<tr>
 				<td>{{i.rule}}</td>
 				<td>{{i.fine}}</td>
+				<td>{{i.student}}</td>
 				<td><a href="{% url 'update-house-rules' user.id i.pk%}" style="color:limegreen;">Edit</a> | <a href="{% url 'delete-house-rules' user.id i.pk%}" style="color:crimson;">Delete</a></td>
 			</tr>
 			{% endfor %}
