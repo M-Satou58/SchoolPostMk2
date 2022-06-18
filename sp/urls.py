@@ -26,6 +26,7 @@ urlpatterns = [
 
     path('rules/house-rules/<str:user>/', views.houseRulesView, name='house-rules'),
     path('rules/house-rules/update/<str:user>/<str:pk>/', views.updateHouseRulesView, name='update-house-rules'),
+    path('rules/house-rules/update/student/<str:user>/<str:pk>/', views.updateStudentHouseRulesView, name='update-student-house-rules'),
     path('rules/house-rules/delete/<str:user>/<str:pk>/', views.deleteHouseRulesView, name='delete-house-rules'),
 
     path('rules/rent/<str:user>/', views.rentView, name='rent'),

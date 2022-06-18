@@ -75,13 +75,19 @@ class Job(models.Model):
 	job = models.CharField(max_length=200, null=True)
 	suggested_per_class = models.CharField(max_length=200, null=True)
 	job_description = models.TextField(max_length=1000, null=True)
+	salary_before = MoneyField(
+        decimal_places=2,
+        default=0,
+        default_currency='PHP',
+        max_digits=11
+    )
 	salary = MoneyField(
         decimal_places=2,
         default=0,
         default_currency='PHP',
         max_digits=11
     )
-	student_assigned = models.OneToOneField(StudentEconomy, null=True, on_delete=models.SET_NULL)
+	student_assigned = models.ManyToManyField(StudentEconomy)
 	date_created = models.DateTimeField(default=timezone.now, null=True)
 
 	def __str__(self):
@@ -90,7 +96,13 @@ class Job(models.Model):
 class Opportunitie(models.Model):
 	teacher = models.CharField(max_length=200, null=True)
 	activity = models.TextField(max_length=1000, null=True)
-	student = models.CharField(max_length=200, null=True)
+	student = models.ManyToManyField(StudentEconomy)
+	amount_before = MoneyField(
+        decimal_places=2,
+        default=0,
+        default_currency='PHP',
+        max_digits=11
+    )
 	amount = MoneyField(
         decimal_places=2,
         default=0,
@@ -104,13 +116,20 @@ class Opportunitie(models.Model):
 class HouseRule(models.Model):
 	teacher = models.CharField(max_length=200, null=True)
 	rule = models.TextField(max_length=1000, null=True)
-	student = models.CharField(max_length=200, null=True)
+	student = models.ManyToManyField(StudentEconomy)
+	fine_before = MoneyField(
+        decimal_places=2,
+        default=0,
+        default_currency='PHP',
+        max_digits=11
+    )
 	fine = MoneyField(
         decimal_places=2,
         default=0,
         default_currency='PHP',
         max_digits=11
     )
+
 	date_created = models.DateTimeField(default=timezone.now, null=True)
 	def __str__(self):
 		return self.rule
@@ -142,7 +161,7 @@ class ItemStore(models.Model):
         default=0,
         default_currency='PHP',
         max_digits=11)
-	student = models.CharField(max_length=200, null=True)
+	student = models.ManyToManyField(StudentEconomy)
 	date_created = models.DateTimeField(default=timezone.now, null=True)
 
 class Bill(models.Model):

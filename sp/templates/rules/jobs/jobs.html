@@ -37,7 +37,7 @@
 				<td>{{i.job}}</td>
 				<td>{{i.suggested_per_class}}</td>
 				<td>{{i.job_description}}</td>
-				<td>{{i.student_assigned.name}}</td>
+				<td>{% for j in i.student_assigned.all %}<span>{{j.name}}</span><br>{% endfor %}</td>
 				<td>{{i.salary}}</td>
 				<td><a href="{% url 'update-jobs' user.id i.id %}" style="color:limegreen;">Edit</a> | <a href="{% url 'delete-jobs' user.id i.id %}" style="color:crimson;">Delete</a></td>
 			</tr>

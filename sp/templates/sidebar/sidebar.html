@@ -10,12 +10,11 @@
 
                 <div class="list-group list-group-flush">
                     <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/"><img src="{% static 'icons/home_icon_001.png' %}"><span class="ms-2 "style="color: #001D6E;">Home</span></a>
-                    {% if user.username == 'admin'%}
+                    
                     <a class="list-group-item list-group-item-action list-group-item-light p-3" href="{% url 't-register'%}"><img src="{% static 'icons/teacher_icon_002.png' %}"><span class="ms-2 "style="color: #001D6E;">Teacher</span></a>
                     <a class="list-group-item list-group-item-action list-group-item-light p-3" href="{% url 's-register'%}"><img src="{% static 'icons/student_icon_001.png' %}"><span class="ms-2 "style="color: #001D6E;">Student</span></a> 
                     <a class="list-group-item list-group-item-action list-group-item-light p-3" href="{% url 'economy' %}"><img src="{% static 'icons/economy_icon_001.png' %}"><span class="ms-2 "style="color: #001D6E;">Economy</span></a>
-                    {% endif %}
-                    {% if user.username != 'admin'%}
+                    
                     <a class="list-group-item list-group-item-action list-group-item-light p-3" data-bs-toggle="collapse" href="#collapseSettings" role="button" aria-expanded="false" aria-controls="collapseSettings">
                       <img src="{% static 'icons/settings_icon_001.png' %}"><span class="ms-2 "style="color: #001D6E;">Settings</span></a>
                     
@@ -64,8 +63,7 @@
                         </div>
                       </div>
                       <!--COLLAPSE -->
-                      {%endif%}
-                      
+                     
                       
 
 

@@ -34,7 +34,7 @@
 			<tr>
 				<td>{{i.activity}}</td>
 				<td>{{i.amount}}</td>
-				<td>{{i.student}}</td>
+				<td>{% for j in i.student.all %}<span>{{j.name}}</span><br>{% endfor %}</td>
 				<td><a href="{% url 'update-opportunities' user.id i.pk %}" style="color:limegreen;">Edit</a> | <a href="{% url 'delete-opportunities' user.id i.pk %}" style="color:crimson;">Delete</a></td>
 			</tr>
 			{% endfor %}

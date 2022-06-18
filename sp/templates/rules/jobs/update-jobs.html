@@ -18,25 +18,7 @@
 		  {% csrf_token %}
 		   
 	    
-		  <div class="mb-1">
-		    <label for="exampleInputEmail1" class="form-label">Job:</label>
-		    {{form.job}}
-		  </div>
-
-		  <div class="mb-1">
-		    <label for="exampleInputEmail1" class="form-label">Suggested Per Class:</label>
-		    {{form.suggested_per_class}}
-		  </div>
-
-		  <div class="mb-1">
-		    <label for="exampleInputEmail1" class="form-label">Job Description:</label>
-		    {{form.job_description}}
-		  </div>
-
-		  <div class="mb-1">
-		    <label for="exampleInputEmail1" class="form-label">Salary:</label>
-		    {{form.salary}}
-		  </div>
+		  {{form}}
 
 		  <div class="btn-group float-end mt-3 mb-3" role="group" aria-label="Basic example">
 			  <button type="submit" class="btn" style="color:white; background-color: #001D6E;">Update</button>

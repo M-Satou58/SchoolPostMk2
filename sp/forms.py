@@ -48,6 +48,7 @@ class RegisterStudentForm(ModelForm):
 		self.fields['first_name'].widget.attrs['class'] = 'form-control'
 		self.fields['middle_name'].widget.attrs['class'] = 'form-control'
 		self.fields['lrn'].widget.attrs['class'] = 'form-control'
+		self.fields['lrn'].widget.attrs['maxlength'] = '13'
 		self.fields['grade_level'].widget.attrs['class'] = 'form-control'
 		self.fields['section'].widget.attrs['class'] = 'form-control'
 
@@ -73,52 +74,71 @@ class CreateJobsForm(ModelForm):
 	class Meta:
 		model = Job
 		fields = '__all__'
-		exclude = ['teacher', 'date_created']
+		exclude = ['teacher', 'date_created','student_assigned','salary_before']
 	
-	def __init__(self, teacher, *args, **kwargs):
+	def __init__(self, *args, **kwargs):
 		super(CreateJobsForm, self).__init__(*args, **kwargs)
 		self.fields['job'].widget.attrs['class'] = 'form-control'
 		self.fields['suggested_per_class'].widget.attrs['class'] = 'form-control'
 		self.fields['job_description'].widget.attrs['class'] = 'form-control'
 		self.fields['salary'].widget.attrs['class'] = 'form-control'
-		self.fields['student_assigned'] = forms.ModelChoiceField(queryset=StudentEconomy.objects.filter(teacher=teacher, status='Active'))
-		self.fields['student_assigned'].widget.attrs['class'] = 'form-control'
 
 class UpdateJobsForm(ModelForm):
 	class Meta:
 		model = Job
-		fields = ['job', 'suggested_per_class', 'job_description', 'salary']
+		fields = ['job', 'suggested_per_class', 'job_description', 'salary', 'student_assigned']
 
-	def __init__(self, *args, **kwargs):
+	def __init__(self, teacher,*args, **kwargs):
 		super(UpdateJobsForm, self).__init__(*args, **kwargs)
 		self.fields['job'].widget.attrs['class'] = 'form-control'
 		self.fields['suggested_per_class'].widget.attrs['class'] = 'form-control'
 		self.fields['job_description'].widget.attrs['class'] = 'form-control'
 		self.fields['salary'].widget.attrs['class'] = 'form-control'
+		self.fields['student_assigned'] = forms.ModelMultipleChoiceField(StudentEconomy.objects.all().order_by('name').filter(teacher=teacher), required=False ,widget=forms.CheckboxSelectMultiple)
 
 class CreateOpportunitiesForm(ModelForm):
+	class Meta:
+		model = Opportunitie
+		fields = ['activity', 'amount']
+
+	def __init__(self,*args, **kwargs):
+		super(CreateOpportunitiesForm, self).__init__(*args, **kwargs)
+		self.fields['activity'].widget.attrs['class'] = 'form-control'
+		self.fields['amount'].widget.attrs['class'] = 'form-control'
+
+class UpdateOpportunitiesForm(ModelForm):
 	class Meta:
 		model = Opportunitie
 		fields = ['activity', 'amount', 'student']
 
 	def __init__(self, teacher,*args, **kwargs):
-		super(CreateOpportunitiesForm, self).__init__(*args, **kwargs)
+		super(UpdateOpportunitiesForm, self).__init__(*args, **kwargs)
 		self.fields['activity'].widget.attrs['class'] = 'form-control'
 		self.fields['amount'].widget.attrs['class'] = 'form-control'
-		self.fields['student'] = forms.ModelChoiceField(queryset=StudentEconomy.objects.filter(teacher=teacher, status='Active'))
-		self.fields['student'].widget.attrs['class'] = 'form-control'
+		self.fields['student'] = forms.ModelMultipleChoiceField(StudentEconomy.objects.all().order_by('name').filter(teacher=teacher), required=False ,widget=forms.CheckboxSelectMultiple)
 
 class CreateHouseRulesForm(ModelForm):
+	class Meta:
+		model = HouseRule
+		fields = ['rule', 'fine']
+
+	def __init__(self,*args, **kwargs):
+		super(CreateHouseRulesForm, self).__init__(*args, **kwargs)
+		self.fields['rule'].widget.attrs['class'] = 'form-control'
+		self.fields['fine'].widget.attrs['class'] = 'form-control'
+
+class UpdateHouseRulesForm(ModelForm):
 	class Meta:
 		model = HouseRule
 		fields = ['rule', 'fine', 'student']
 
 	def __init__(self, teacher,*args, **kwargs):
-		super(CreateHouseRulesForm, self).__init__(*args, **kwargs)
+		super(UpdateHouseRulesForm, self).__init__(*args, **kwargs)
 		self.fields['rule'].widget.attrs['class'] = 'form-control'
 		self.fields['fine'].widget.attrs['class'] = 'form-control'
-		self.fields['student'] = forms.ModelChoiceField(queryset=StudentEconomy.objects.filter(teacher=teacher, status='Active'))
-		self.fields['student'].widget.attrs['class'] = 'form-control'
+		self.fields['student'] = forms.ModelMultipleChoiceField(StudentEconomy.objects.all().order_by('name').filter(teacher=teacher), required=False ,widget=forms.CheckboxSelectMultiple)
+		# self.fields['student'] = forms.ModelMultipleChoiceField(queryset=StudentEconomy.objects.filter(teacher=teacher, status='Active'))
+		# self.fields['student'].widget.attrs['class'] = 'form-control'
 
 
 
@@ -142,14 +162,13 @@ class ItemStoreForm(ModelForm):
 	class Meta:
 		model = ItemStore
 		fields = '__all__'
-		exclude = ['teacher','date_created']
+		exclude = ['teacher','date_created', 'student']
 
 	def __init__(self, teacher, *args, **kwargs):
 		super(ItemStoreForm, self).__init__(*args, **kwargs)
 		self.fields['item'].widget.attrs['class'] = 'form-control'
 		self.fields['price'].widget.attrs['class'] = 'form-control'
-		self.fields['student'] = forms.ModelChoiceField(queryset=StudentEconomy.objects.filter(teacher=teacher, status='Active'))
-		self.fields['student'].widget.attrs['class'] = 'form-control'
+		self.fields['student'] = forms.ModelMultipleChoiceField(StudentEconomy.objects.all().order_by('name').filter(teacher=teacher), required=False ,widget=forms.CheckboxSelectMultiple)
 
 
 class BillForm(ModelForm):

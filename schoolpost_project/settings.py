@@ -23,7 +23,7 @@ TEMPLATES_DIRS = os.path.join(BASE_DIR,'templates')
 SECRET_KEY = 'django-insecure-z1#ji5ton1f^879ix-7v_(24l(9*wid9a55l(x1^d%1yhks&s$'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['schoolpost.herokuapp.com', '127.0.0.1']
 
@@ -134,6 +134,9 @@ MEDIA_URL = '/images/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
 ]
+MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images')
+
+
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 LOGIN_REDIRECT_URL = "/"
 
@@ -144,7 +147,7 @@ environ.Env.read_env()
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 EMAIL_HOST = 'smtp.sendgrid.net'
 EMAIL_HOST_USER = 'apikey' # this is exactly the value 'apikey'
-EMAIL_HOST_PASSWORD = env('SECRET_KEY') # this is your API key
+EMAIL_HOST_PASSWORD = os.environ.get('SENDGRID_API_KEY')# this is your API key
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -152,4 +155,4 @@ DEFAULT_FROM_EMAIL = 'jendeukiee1627@gmail.com' # this is the sendgrid email
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images')
+

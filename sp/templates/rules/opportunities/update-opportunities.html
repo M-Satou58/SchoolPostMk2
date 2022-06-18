@@ -17,7 +17,7 @@
 		<form method="POST">
 			{% csrf_token %}
 			{{form}}
-			<div class="btn-group float-end mt-3" role="group" aria-label="Basic example">
+			<div class="btn-group float-end mt-3 mb-3" role="group" aria-label="Basic example">
 			  <button type="submit" class="btn" style="color:white; background-color: #001D6E;">Update</button>
 			  <button type="button" class="btn " style="background-color:crimson;"><a class="text-decoration-none" style="color:white;" href="{% url 'opportunities' user.id %}">Cancel</button>
 			</div>

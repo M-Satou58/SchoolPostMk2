@@ -34,13 +34,17 @@
 			<tr>
 				<td>{{i.rule}}</td>
 				<td>{{i.fine}}</td>
-				<td>{{i.student}}</td>
+				<td>{% for j in i.student.all %}<span>{{j.name}}</span><br>{% endfor %}</td>
 				<td><a href="{% url 'update-house-rules' user.id i.pk%}" style="color:limegreen;">Edit</a> | <a href="{% url 'delete-house-rules' user.id i.pk%}" style="color:crimson;">Delete</a></td>
 			</tr>
 			{% endfor %}
 		</table>
 	</div>
 
+	<!-- <div class="col-md-8 col-lg-8">
+		{% include 'rules/house-rules/house-rules-accordion.html'%}
+	</div>
+ -->
 	<div class="col-md-4 col-lg-4">
 		<h6 class="p-2 shadow-sm" style="color: white; background-color: #001D6E;">Add House Rules</h6>
 		<form method="POST">
